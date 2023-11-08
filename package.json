@@ -5,7 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "npm run typeorm migration:generate -- -d ./src/db/data-source.ts",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/db/data-source.ts",
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d ./src/db/data-source.ts",
+    "migration:create": "npm run typeorm migration:create"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +23,7 @@
     "inversify-express-utils": "^6.4.6",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.9.1",
     "typeorm": "^0.3.17",
     "typescript": "^5.2.2"
   },
