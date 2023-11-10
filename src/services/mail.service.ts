@@ -44,10 +44,11 @@ export class MailService {
 
     try {
       const info = await this.transporter.sendMail(mailOptions);
+      console.log("Email sent: ", info.response);
       logger.info(`Email sent: ${info.response}`);
     } catch (error: any) {
+      console.error("Error sending email: ", error);
       logger.error(`Error sending email: ${error}`, { stack: error.stack });
-      throw error;
     }
   }
 

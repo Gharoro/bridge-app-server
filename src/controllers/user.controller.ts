@@ -77,6 +77,8 @@ export default class UserController implements interfaces.Controller {
         201
       );
     } catch (err: any) {
+      console.log("Error Creating User: ", err);
+
       logger.error(`An error occurred: ${err.message}`, { stack: err.stack });
       return error_response(res, err.message, 500);
     }
