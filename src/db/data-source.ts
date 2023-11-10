@@ -1,11 +1,6 @@
 import "dotenv/config";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "../entities/User";
-import { House } from "../entities/House";
-import { Bids } from "../entities/Bids";
-import { CounterBid } from "../entities/CounterBids";
-import { Transaction } from "../entities/Transaction";
 
 const port = process.env.DB_PORT as unknown as number | undefined;
 
@@ -17,6 +12,6 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, House, Bids, CounterBid, Transaction],
-  migrations: ["src/db/migrations/*{.ts,.js}"],
+  entities: ["dist/**/*.entities{.ts,.js}"],
+  migrations: ["dist/db/migrations/*{.ts,.js}"],
 });
