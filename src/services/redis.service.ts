@@ -1,14 +1,13 @@
 import { injectable } from "inversify";
-import Redis from "ioredis";
+import { createClient } from "redis";
+import type { RedisClientType } from "redis";
 import logger from "../logger";
 
 @injectable()
 export class RedisService {
-  private client: Redis;
+  private client: RedisClientType;
 
   constructor() {
-    this.client = new Redis();
-
     const redisUrl = process.env.REDIS_URL;
 
     if (!redisUrl) {
@@ -16,18 +15,25 @@ export class RedisService {
       throw new Error("REDIS_URL environment variable is not defined");
     }
 
-    this.client = new Redis(redisUrl);
+    this.client = createClient({ url: redisUrl });
+
+    this.client.on("error", (err: any) => {
+      logger.error(`Error connecting to Redis: ${err.message}`, {
+        stack: err.stack,
+      });
+      throw new Error("Error connecting to Redis");
+    });
+
+    this.client.connect();
   }
 
   public async get(key: string): Promise<string | null> {
     try {
-      const result = await this.client.get(key);
-      return result || null;
+      return (await this.client.get(key)) || null;
     } catch (err: any) {
-      logger.error(`Error fetching from redis: ${err.message}`, {
-        stack: err.stack,
-      });
-      throw new Error("Error fetching from redis");
+      const errorMessage = `Error fetching from Redis: ${err.message}`;
+      logger.error(errorMessage, { stack: err.stack });
+      throw new Error(errorMessage);
     }
   }
 
@@ -37,12 +43,11 @@ export class RedisService {
     value: string
   ): Promise<void> {
     try {
-      await this.client.setex(key, seconds, value);
+      await this.client.setEx(key, seconds, value);
     } catch (err: any) {
-      logger.error(`Error setting value in redis: ${err.message}`, {
-        stack: err.stack,
-      });
-      throw new Error("Error setting value in redis");
+      const errorMessage = `Error setting value in Redis: ${err.message}`;
+      logger.error(errorMessage, { stack: err.stack });
+      throw new Error(errorMessage);
     }
   }
 
@@ -50,10 +55,9 @@ export class RedisService {
     try {
       await this.client.del(key);
     } catch (err: any) {
-      logger.error(`Error deleting key ${key} from Redis: ${err.message}`, {
-        stack: err.stack,
-      });
-      throw new Error(`Error deleting key ${key} from Redis`);
+      const errorMessage = `Error deleting key ${key} from Redis: ${err.message}`;
+      logger.error(errorMessage, { stack: err.stack });
+      throw new Error(errorMessage);
     }
   }
 }

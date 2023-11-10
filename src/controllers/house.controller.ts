@@ -34,11 +34,10 @@ export default class HouseController implements interfaces.Controller {
     try {
       // Attempt fetching data from cache
       const cached_data = await this.redisService.get(REDIS_KEYS.HOUSES);
-
       if (cached_data) {
         return success_response(
           res,
-          `Found ${JSON.parse(cached_data).length} ${
+          `Cached Result - Found ${JSON.parse(cached_data).length} ${
             JSON.parse(cached_data).length > 1 ? "houses" : "house"
           }`,
           JSON.parse(cached_data),
