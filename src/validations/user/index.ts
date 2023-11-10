@@ -35,12 +35,3 @@ export const loginSchema = Joi.object({
     )
     .required(),
 });
-
-export interface SignupRequest {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  profile_picture: string;
-  role: "admin" | "landlord" | "tenant";
-}

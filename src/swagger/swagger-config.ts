@@ -4,7 +4,7 @@ import * as swaggerUi from "swagger-ui-express";
 import UserController from "../controllers/user.controller";
 import HouseController from "../controllers/house.controller";
 
-export const configureSwagger = (app: express.Application) => {
+const configureSwagger = (app: express.Application) => {
   const controllers = [UserController, HouseController];
 
   const options: swaggerJsdoc.Options = {
@@ -801,3 +801,5 @@ export const configureSwagger = (app: express.Application) => {
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 };
+
+export default configureSwagger;

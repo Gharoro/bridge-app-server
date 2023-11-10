@@ -3,8 +3,8 @@ import express from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import container from "./container";
 import { AppDataSource } from "./db/data-source";
-import { configureSwagger } from "./swagger/swagger-config";
 import logger from "./logger";
+import configureSwagger from "./swagger/swagger-config";
 
 (async () => {
   try {
