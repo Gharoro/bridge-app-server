@@ -3,6 +3,8 @@ import express from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import container from "./container";
 import { AppDataSource } from "./db/data-source";
+import { configureSwagger } from "./swagger/swagger-config";
+import logger from "./logger";
 
 (async () => {
   try {
@@ -22,6 +24,7 @@ import { AppDataSource } from "./db/data-source";
     // Configure middlewares
     server.setConfig((app) => {
       app.use(express.json());
+      configureSwagger(app);
     });
 
     const port: number = process.env.PORT
@@ -33,7 +36,9 @@ import { AppDataSource } from "./db/data-source";
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
-  } catch (error: any) {
-    console.error("Error during initialization:", error);
+  } catch (err: any) {
+    logger.error(`Error during initialization: ${err.message}`, {
+      stack: err.stack,
+    });
   }
 })();
