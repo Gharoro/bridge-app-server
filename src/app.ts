@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import express from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import container from "./container";
