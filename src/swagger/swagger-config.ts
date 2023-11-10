@@ -11,7 +11,7 @@ const configureSwagger = (app: express.Application) => {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "Your API Title",
+        title: "Bridge API",
         version: "1.0.0",
       },
       servers: [
@@ -22,7 +22,7 @@ const configureSwagger = (app: express.Application) => {
       components: {
         securitySchemes: {
           BearerAuth: {
-            type: "http",
+            type: "https",
             scheme: "bearer",
             bearerFormat: "JWT",
           },
