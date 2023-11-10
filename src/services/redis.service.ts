@@ -9,15 +9,14 @@ export class RedisService {
   constructor() {
     this.client = new Redis();
 
-    const redisHost = process.env.REDIS_HOST;
-    const redisPort = parseInt(process.env.REDIS_PORT as string);
-    const redisPassword = process.env.REDIS_PASSWORD;
+    const redisUrl = process.env.REDIS_URL;
 
-    this.client = new Redis({
-      host: redisHost,
-      port: redisPort,
-      password: redisPassword,
-    });
+    if (!redisUrl) {
+      logger.error(`REDIS_URL environment variable is not defined`);
+      throw new Error("REDIS_URL environment variable is not defined");
+    }
+
+    this.client = new Redis(redisUrl);
   }
 
   public async get(key: string): Promise<string | null> {
